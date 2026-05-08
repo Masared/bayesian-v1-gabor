@@ -66,17 +66,19 @@ cd bayesian-v1-gabor
 mkdir simulated_data
 ```
 
-### 2. パラメータを設定する（セル3）
+### 2. パラメータを設定する（セル4）
 
 ```python
-xm_val        = 0.0   # ピーク位置
-fn_val        = 0.52  # 空間周波数
-sigma_val     = 1.0   # エンベロープの広がり
-noise_level   = 0.1   # ガウスノイズの標準偏差
-poisson_scale = 5.0   # ポアソンノイズのスケール（大きいほどノイズ小）
+xm_val        = 0.0    # ピーク位置
+fn_val        = 0.52   # 空間周波数
+sigma_val     = 1.0    # エンベロープの広がり
+noise_level   = 0.1    # ガウスノイズの標準偏差
+poisson_scale = 5.0    # ポアソンノイズのスケール（大きいほどノイズ小）
+num_points    = 1000   # x の点数
+x_min, x_max  = -5, 5  # x の範囲
 ```
 
-### 3. ノイズの種類と保存を設定する（セル11）
+### 3. ノイズの種類と保存を設定する（セル12）
 
 ```python
 noise = 'gauss'   # 'gauss' または 'poisson'
@@ -90,8 +92,11 @@ save  = True      # True にすると simulated_data/ 以下に保存
 ```
 simulated_data/gauss_xm0.0_fn0.52_sigma1.0/
 ├── params.json   # 全パラメータ（再現に必要な情報をすべて記録）
-└── data.txt      # "x  y" 形式、1000点
+└── data.txt      # "x  y" 形式、num_points 点
 ```
+
+> **ポアソンノイズの保存値について**  
+> ポアソンノイズは `Poisson(scale * S(x)) / scale` で正規化した値を保存します。これにより `S(x)` と同じスケール（おおむね 0〜2）で比較できます。
 
 ---
 
@@ -100,10 +105,12 @@ simulated_data/gauss_xm0.0_fn0.52_sigma1.0/
 ```python
 from data_generate import calculate_s_x, add_gaussian_noise, add_poisson_noise
 
-x       = np.linspace(-5, 5, 1000)
+x_min, x_max = -5, 5
+num_points   = 1000
+x       = np.linspace(x_min, x_max, num_points)
 s_x     = calculate_s_x(x, xm=0.0, fn=0.52, sigma=1.0)
 gauss   = add_gaussian_noise(s_x, sigma=0.1)
-poisson = add_poisson_noise(s_x, scale=5.0)
+poisson = add_poisson_noise(s_x, scale=5.0) / 5.0  # 正規化済み
 ```
 
 ---
