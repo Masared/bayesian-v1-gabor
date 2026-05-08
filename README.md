@@ -52,18 +52,18 @@ bayesian-v1-gabor/
 Python 3.10 以上を推奨します。
 
 ```bash
-pip install numpy matplotlib corner
+pip install numpy matplotlib
 ```
 
 ---
 
 ## 使い方
 
-### 1. ノートブックを開く
+### 1. 作業ディレクトリに移動して、simulated_data/ を作成する
 
 ```bash
-cd notebooks
-jupyter lab gabor_simulation.ipynb
+cd bayesian-v1-gabor
+mkdir simulated_data
 ```
 
 ### 2. パラメータを設定する（セル3）
